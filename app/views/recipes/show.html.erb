@@ -1,0 +1,58 @@
+<h2><%= @recipe.name.capitalize %></h2>
+<div class='content_details'>
+  <div class="details">
+  <p>Preparation Time: <%= "#{@recipe.preparation_time} hours" %></p>
+  <p>Cooking Time: <%= "#{@recipe.cooking_time} hours" %></p>
+  <p><%= @recipe.description %></p>
+  </div>
+  <div class="toggle_section">
+  <% if can? :delete, @recipe %>
+  <p>Change it to public or private</p>
+    <% if @recipe.public %>
+      <%= button_to "Private", toggle_public_path(@recipe.id), method: :patch  %>
+    <% else %>
+      <%= button_to "Public", toggle_public_path(@recipe.id), method: :patch  %>
+    <% end %>
+  <% end %>
+  </div>
+
+</div>
+
+<% if can? :delete, @recipe %>
+<div class='recipe_show_buttons'>
+  <%= link_to "Generate Shopping List", user_shoping_lists_path(@recipe.user) %>
+  <%= link_to "Add Ingredient", new_recipe_recipe_food_path(@recipe) %>
+</div>
+<% end %>
+
+<div class='content_table'>
+  <table>
+    <thead>
+      <tr>
+        <th >Food</th>
+        <th>Quantity</th>
+        <th>Value</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+    <% @recipe_foods.each do |food| %>
+      <tr>
+        <td><%= food.food.name.capitalize %></td>
+        <td><%= "#{food.quantity}" %></td>
+        <td><%= "$ #{food.food.price}" %></td>
+        <td>
+        <% if can? :delete, @recipe %>
+          <%= button_to "Delete", recipe_recipe_food_path(@recipe, food), method: :delete %>
+          <% else %>
+          <span>Not allowed</span>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+
+    </tbody>
+  </table>
+</div>

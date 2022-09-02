@@ -1,0 +1,9 @@
+<div class='form_section'>
+  <%= form_with url: "/recipes/#{@recipe.id}/recipe_foods", scope: :recipe_food do |f| %>
+  <%= f.label 'Select an ingredient' %>
+       <%= f.collection_select(:food_id, Food.where.not(id: @recipe.food_ids ), :id, :name ) %>
+        <%= f.number_field :quantity, placeholder: 'Quantity' %>
+        <%= f.hidden_field :recipe_id, value: @recipe.id %>
+        <%= f.submit "Add" %>
+      <% end %>
+</div>
